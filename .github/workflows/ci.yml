@@ -1,0 +1,163 @@
+name: Continuous Integration
+on: push
+
+jobs:
+  build-android-release:
+    name: Build Android (Release)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install Yarn dependencies
+        run: yarn --frozen-lockfile --prefer-offline
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          cache: gradle
+          distribution: zulu
+          java-version: 11
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Build application
+        run: |
+          cd ./android
+          ./gradlew assembleRelease
+
+      - name: Upload application
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: ./android/app/build/outputs/apk/release/app-release.apk
+
+  e2e-ios-release:
+    name: e2e iOS (Release)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline
+
+      - name: Install macOS dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+#      - name: Setup Ruby
+#        uses: ruby/setup-ruby@v1
+#        with:
+#          bundler-cache: true
+
+      - name: Cache CocoaPods
+        id: cache-cocoapods
+        uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install CocoaPods
+        if: steps.cache-cocoapods.outputs.cache-hit != 'true'
+        run: cd ios ; pod install ; cd -
+
+      - name: Detox rebuild framework cache
+        run: yarn detox rebuild-framework-cache
+
+      - name: Cache Detox build
+        id: cache-detox-build
+        uses: actions/cache@v3
+        with:
+          path: ios/build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
+
+      - name: Detox build
+        run: yarn detox build --configuration ios.sim.release
+
+      - name: Detox test
+        run: yarn detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts
+          path: artifacts
+
+  e2e-android-release:
+    name: e2e Android (Release)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install Yarn dependencies
+        run: yarn --frozen-lockfile --prefer-offline
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          cache: gradle
+          distribution: zulu
+          java-version: 11
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Cache Detox build
+        id: cache-detox-buildm
+        uses: actions/cache@v3
+        with:
+          path: android/app/build
+          key: ${{ runner.os }}-detox-build
+          restore-keys: |
+            ${{ runner.os }}-detox-build
+
+      - name: Detox build
+        run: yarn detox build --configuration android.emu.release
+
+      - name: Get device name
+        id: device
+        run: node -e "console.log('AVD_NAME=' + require('./.detoxrc').devices.emulator.device.avdName)" >> $GITHUB_OUTPUT
+
+      - name: Detox test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          avd-name: ${{ steps.device.outputs.AVD_NAME }}
+          script: yarn detox test --configuration android.emu.release --headless --record-logs all
+
+      - name: Upload artifacts
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: detox-artifacts
+          path: artifacts
