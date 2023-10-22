@@ -186,7 +186,7 @@ export const RootNavigation = () => {
           options={({
             navigation,
           }: NativeStackScreenProps<StackParamList, typeof Routes.Home>) => ({
-            title: 'Lightpainter',
+            title: 'LumoSync',
             headerLeft: () => <HomeHeaderLeft />,
             headerRight: () => (
               <IconButton
