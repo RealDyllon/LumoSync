@@ -51,7 +51,9 @@ const PeripheralCard = ({
   return (
     <Card
       onPress={() => onPress(peripheral.device.id)}
-      style={styles.card}
+      style={[styles.card, {
+        backgroundColor: isPaired ? '#e7c8f7' : '#ccc',
+      }]}
       disabled={isGrouped || !isPaired}>
       <Card.Title title={peripheral.name} />
       <Card.Actions>

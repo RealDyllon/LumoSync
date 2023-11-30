@@ -36,15 +36,21 @@ export const GroupedLightsCard = () => {
           marginTop: 8,
           marginLeft: 16,
           marginBottom: 20,
-          flexDirection: 'row',
         }}>
         <Text variant="titleMedium">Grouped Lights</Text>
         <View style={{flex: 1}} />
-        <Switch
-          value={power}
-          onValueChange={handlePowerStateChange}
-          style={{marginRight: 20, marginTop: 20}}
-        />
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+        }}>
+          <Text variant="bodyMedium">Tap to Edit Group</Text>
+          <View style={{flex: 1}} />
+          <Switch
+            value={power}
+            onValueChange={handlePowerStateChange}
+            style={{marginRight: 10, marginTop: 20}}
+          />
+        </View>
       </View>
     </Card>
   );
@@ -53,5 +59,6 @@ export const GroupedLightsCard = () => {
 const styles = StyleSheet.create({
   card: {
     marginBottom: 12,
+    backgroundColor: '#dfb5f5',
   },
 });

@@ -16,6 +16,7 @@ import {
   TextInput,
   Tooltip,
 } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {PeripheralsScreen} from '../screens/Peripherals';
 import {StyleSheet, View} from 'react-native';
 import {usePeripheralStore} from '../state';
@@ -60,7 +61,21 @@ const HomeHeaderLeft = () => {
   const isScanning = usePeripheralStore(state => state.isScanning);
   return (
     <View style={styles.homeHeaderActivityIndicatorContainer}>
-      {isScanning ? <ActivityIndicator size="small" /> : null}
+      {isScanning ?
+        <>
+          <ActivityIndicator size="small" style={{
+            position: 'absolute',
+            zIndex: 1,
+            top: 0
+          }} />
+          <Icon
+            style={{
+            position: 'absolute',
+            zIndex: 2,
+            top: 4,
+            left: 4
+          }} name="bluetooth" size={16} color={MD3Colors.primary50} />
+        </> : null}
     </View>
   );
 };
@@ -130,6 +145,8 @@ const PeripheralControlHeaderRight = ({
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
+          marginLeft: -12,
+          marginRight: -8
         }}>
         <Menu
           visible={isMenuVisible}
@@ -242,5 +259,6 @@ const styles = StyleSheet.create({
   homeHeaderActivityIndicatorContainer: {
     paddingLeft: 10,
     paddingRight: 10,
+    paddingBottom: 20
   },
 });

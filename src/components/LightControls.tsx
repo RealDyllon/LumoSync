@@ -96,24 +96,25 @@ export const LightControls = ({
       />
       <Divider style={styles.divider} />
 
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionHeaderTitle}>Strobe</Text>
-        <View style={styles.spacer} />
-        <Switch
-          value={properties.strobe}
-          onValueChange={handleStrobeStateChange}
-          style={styles.switch}
-          disabled={disabled || !properties.power}
-        />
-      </View>
-      <Divider style={styles.divider} />
+      {/*<View style={styles.sectionHeader}>*/}
+      {/*  <Text style={styles.sectionHeaderTitle}>Strobe</Text>*/}
+      {/*  <View style={styles.spacer} />*/}
+      {/*  <Switch*/}
+      {/*    value={properties.strobe}*/}
+      {/*    onValueChange={handleStrobeStateChange}*/}
+      {/*    style={styles.switch}*/}
+      {/*    disabled={disabled || !properties.power}*/}
+      {/*  />*/}
+      {/*</View>*/}
+      {/*<Divider style={styles.divider} />*/}
 
-      {properties.strobe && (
-        <StrobeSlider
-          frequency={properties.strobeFreq}
-          handleFrequencyChange={handleStrobeFreqChange}
-        />
-      )}
+      {/*{properties.strobe && (*/}
+      {/*  <StrobeSlider*/}
+      {/*    frequency={properties.strobeFreq}*/}
+      {/*    handleFrequencyChange={handleStrobeFreqChange}*/}
+      {/*  />*/}
+      {/*)}*/}
+
       {properties.lightMode === lightMode.STATIC_COLOR && (
         <>
           <Text style={styles.sectionHeaderTitle}>Color</Text>
