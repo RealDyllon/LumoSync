@@ -89,6 +89,7 @@ export const PeripheralsScreen = () => {
           renderItem={renderItem}
           keyExtractor={item => item.device.id}
         />
+
       </SafeAreaView>
     </>
   );
