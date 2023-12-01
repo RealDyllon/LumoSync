@@ -36,7 +36,7 @@ const SCAN_DURATION = 5000;
 export const bleScan = async () => {
   usePeripheralStore.getState().setScanning(true);
   if (!bleManager) {
-    logMsg('[scanAndConnect] bleManager needs to be created first!');
+    logError('[scanAndConnect] bleManager needs to be created first!', new Error('bleManager needs to be created first!'));
     return;
   }
 
