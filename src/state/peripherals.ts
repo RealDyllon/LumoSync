@@ -26,6 +26,8 @@ export type GroupedPeripheralProperties = Optional<
 };
 
 export interface PeripheralState {
+  bluetoothEnabled: boolean;
+  setBluetoothEnabled: (bluetoothEnabled: boolean) => void;
   isScanning: boolean;
   setScanning: (isScanning: boolean) => void;
   peripherals: Map<string, Peripheral>;
@@ -57,6 +59,9 @@ const initialPeripherals = new Map<string, Peripheral>();
 
 export const usePeripheralStore = create<PeripheralState>()(
   zustandFlipper((set, get) => ({
+    // bluetooth enabled
+    bluetoothEnabled: false,
+    setBluetoothEnabled: (bluetoothEnabled: boolean) => set({bluetoothEnabled}),
     // scanning
     isScanning: false,
     setScanning: isScanning => set({isScanning}),

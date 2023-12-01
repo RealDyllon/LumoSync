@@ -5,6 +5,7 @@ import PeripheralCard from './PeripheralCard';
 import {usePeripheralStore} from '../../state';
 import {GroupedLightsCard} from './GroupedLightsCard';
 import {Routes, ScreenProps} from '../../navigation';
+import {bleManager} from "../../utils/ble";
 
 export const HomeScreen = ({navigation}: ScreenProps<'Home'>) => {
   const peripherals = usePeripheralStore(state => state.peripherals);

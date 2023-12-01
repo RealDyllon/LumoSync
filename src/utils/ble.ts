@@ -3,7 +3,7 @@ import {
   Device,
   ScanMode,
   ScanOptions,
-} from '@my01/react-native-ble-plx';
+} from 'react-native-ble-plx';
 import {
   defaultProperties,
   MZDS01_NAME,

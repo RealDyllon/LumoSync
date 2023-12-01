@@ -9,7 +9,7 @@ import {
 import {
   State as BleManagerState,
   Subscription,
-} from '@my01/react-native-ble-plx';
+} from 'react-native-ble-plx';
 import {logError, logMsg} from "../utils/logger";
 
 const SCAN_INTERVAL = 10; // seconds
@@ -47,9 +47,12 @@ const BLE = () => {
     if (isPermissionGranted && isBluetoothEnabled) {
       const subscription = bleManager.onStateChange(state => {
         if (state === BleManagerState.PoweredOn) {
+          logMsg('bluetooth is on')
+          setBluetoothEnabled(true);
           continuousScan();
         } else {
           logMsg('bluetooth is not on')
+          setBluetoothEnabled(false);
           bleManager.enable().catch(error => {
             logError('Failed to enable bluetooth', error);
           })
@@ -64,6 +67,7 @@ const BLE = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bleManager, bleManager.state, isPermissionGranted, isBluetoothEnabled]);
 
+  const setBluetoothEnabled = usePeripheralStore(state => state.setBluetoothEnabled);
   const peripherals = usePeripheralStore(state => state.peripherals);
   const setPeripheral = usePeripheralStore(state => state.setPeripheral);
   const removePeripheral = usePeripheralStore(state => state.removePeripheral);
