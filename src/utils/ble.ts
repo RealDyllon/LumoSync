@@ -181,23 +181,3 @@ export const handleAndroidPermissions = () => {
     useStartupStore.getState().setPermissionGranted(true);
   }
 };
-
-export const enableBluetooth = () => {
-  // TODO: this function is broken if bluetooth is already enabled.
-  //  to be replaced with a bluetooth power library
-  // logMsg('[enableBluetooth] enabling bluetooth...');
-  // if (Platform.OS === 'android') {
-  //   bleManager
-  //     .enable()
-  //     .then(() => {
-  //       logMsg('[enableBluetooth] Bluetooth is enabled');
-  //       useStartupStore.getState().setBluetoothEnabled(true);
-  //     })
-  //     .catch(error => {
-  //       logError('[enableBluetooth] Bluetooth is NOT enabled', error);
-  //     });
-  // } else {
-  //   logMsg('[enableBluetooth] Bluetooth is enabled');
-  useStartupStore.getState().setBluetoothEnabled(true);
-  // }
-};

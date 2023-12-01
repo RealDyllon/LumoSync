@@ -3,7 +3,6 @@ import {usePeripheralStore, useStartupStore} from '../state';
 import {
   bleManager,
   bleScan,
-  enableBluetooth,
   handleAndroidPermissions,
 } from '../utils/ble';
 import {
@@ -15,10 +14,11 @@ import {logError, logMsg} from "../utils/logger";
 const SCAN_INTERVAL = 10; // seconds
 
 const BLE = () => {
-  const isBluetoothEnabled = useStartupStore(state => state.isBluetoothEnabled);
   const isPermissionGranted = useStartupStore(
     state => state.isPermissionGranted,
   );
+  const isBluetoothEnabled = useStartupStore(state => state.isBluetoothEnabled);
+  const setBluetoothEnabled = useStartupStore(state => state.setBluetoothEnabled);
 
   // console.log('isBluetoothEnabled', isBluetoothEnabled);
   // console.log('isPermissionGranted', isPermissionGranted);
@@ -39,12 +39,12 @@ const BLE = () => {
 
   useEffect(() => {
     if (isPermissionGranted) {
-      enableBluetooth();
+      // enableBluetooth();
     }
   }, [isPermissionGranted]);
 
   useEffect(() => {
-    if (isPermissionGranted && isBluetoothEnabled) {
+    if (isPermissionGranted) {
       const subscription = bleManager.onStateChange(state => {
         if (state === BleManagerState.PoweredOn) {
           logMsg('bluetooth is on')
@@ -67,7 +67,6 @@ const BLE = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bleManager, bleManager.state, isPermissionGranted, isBluetoothEnabled]);
 
-  const setBluetoothEnabled = usePeripheralStore(state => state.setBluetoothEnabled);
   const peripherals = usePeripheralStore(state => state.peripherals);
   const setPeripheral = usePeripheralStore(state => state.setPeripheral);
   const removePeripheral = usePeripheralStore(state => state.removePeripheral);

@@ -5,8 +5,8 @@ interface StartupState {
   initialScan: boolean;
   setInitialScan: (initialScan: boolean) => void;
   isBluetoothEnabled: boolean;
-  isPermissionGranted: boolean;
   setBluetoothEnabled: (isBluetoothEnabled: boolean) => void;
+  isPermissionGranted: boolean;
   setPermissionGranted: (isPermissionGranted: boolean) => void;
 }
 
@@ -15,9 +15,9 @@ export const useStartupStore = create<StartupState>()(
     initialScan: false,
     setInitialScan: (initialScan: boolean) => set({initialScan}),
     isBluetoothEnabled: false,
-    isPermissionGranted: false,
     setBluetoothEnabled: (isBluetoothEnabled: boolean) =>
       set({isBluetoothEnabled}),
+    isPermissionGranted: false,
     setPermissionGranted: (isPermissionGranted: boolean) =>
       set({isPermissionGranted}),
   })),

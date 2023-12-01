@@ -2,12 +2,17 @@ import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import SystemStatusBar from '../../components/SystemStatusBar';
 import PeripheralCard from './PeripheralCard';
-import {usePeripheralStore} from '../../state';
+import {usePeripheralStore, useStartupStore} from '../../state';
 import {GroupedLightsCard} from './GroupedLightsCard';
 import {Routes, ScreenProps} from '../../navigation';
-import {bleManager} from "../../utils/ble";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export const HomeScreen = ({navigation}: ScreenProps<'Home'>) => {
+
+  const isPermissionGranted = useStartupStore(state => state.isPermissionGranted);
+  const isBluetoothEnabled = useStartupStore(state => state.isBluetoothEnabled);
+
   const peripherals = usePeripheralStore(state => state.peripherals);
   const setPeripheralProperty = usePeripheralStore(
     state => state.setPeripheralProperty,
@@ -38,6 +43,18 @@ export const HomeScreen = ({navigation}: ScreenProps<'Home'>) => {
   return (
     <View>
       <SystemStatusBar barStyle="light-content" />
+      {!isPermissionGranted ? null : (
+        <View style={styles.warningContainer}>
+          <Icon name="bluetooth-off" size={18} color="black" />
+          <Text>Bluetooth permission has not been granted. It's required to use this app</Text>
+        </View>
+      )}
+      {!isBluetoothEnabled ? null : (
+        <View style={styles.warningContainer}>
+          <Icon name="bluetooth-off" size={18} color="black" />
+          <Text>Bluetooth is not enabled</Text>
+        </View>
+      )}
       <FlatList
         data={Array.from(peripherals.values())}
         style={styles.list}
@@ -71,4 +88,11 @@ const styles = StyleSheet.create({
   list: {
     padding: 12,
   },
+  warningContainer: {
+    backgroundColor: 'orange',
+    padding: 12,
+    paddingRight: 24,
+    marginBottom: 12,
+    flexDirection: 'row',
+  }
 });
