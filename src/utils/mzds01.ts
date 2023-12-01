@@ -3,7 +3,7 @@ import {
   Characteristic,
   Device,
   Service,
-} from '@my01/react-native-ble-plx';
+} from 'react-native-ble-plx';
 import {bleManager} from './ble';
 import {usePeripheralStore} from '../state';
 import {logError} from "./logger";
