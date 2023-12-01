@@ -6,6 +6,7 @@ import {
 } from '@my01/react-native-ble-plx';
 import {bleManager} from './ble';
 import {usePeripheralStore} from '../state';
+import {logError} from "./logger";
 
 var Buffer = require('@craftzdog/react-native-buffer').Buffer;
 
@@ -157,6 +158,8 @@ const writeData = async (deviceIds: string | string[], data: Base64) => {
             }
           }
         }
+      }).catch(err => {
+        logError('[writeData] discoverAllServicesAndCharacteristics error', err)
       });
     });
   });

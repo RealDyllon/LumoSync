@@ -15,14 +15,14 @@ export const logMsg = (message: string, additional?: string) => {
 }
 
 export const logError = (text: string, error: Error, extra?: any) => {
-  if (__DEV__) {
+  // if (__DEV__) {
     console.error(text, error);
-  } else {
+  // } else {
     Sentry.captureException(error, {
       extra: {
         text,
         extra
       },
     });
-  }
+  // }
 }
