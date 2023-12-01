@@ -12,6 +12,7 @@ import {
 import {DEVICE_NAME, PeripheralProperties} from './index';
 import {usePeripheralStore, useStartupStore} from '../state';
 import {PermissionsAndroid, Platform} from 'react-native';
+import {logError, logMsg} from "./logger";
 
 export interface Peripheral {
   device: Device; // BleManagerDevice
@@ -35,16 +36,16 @@ const SCAN_DURATION = 5000;
 export const bleScan = async () => {
   usePeripheralStore.getState().setScanning(true);
   if (!bleManager) {
-    console.debug('[scanAndConnect] bleManager needs to be created first!');
+    logError('[scanAndConnect] bleManager needs to be created first!', new Error('bleManager needs to be created first!'));
     return;
   }
 
   // const devices: Device[] = [];
-  console.debug('[scanAndConnect] starting device scan');
+  logMsg('[scanAndConnect] starting device scan');
   bleManager.startDeviceScan(null, scanOptions, (error, device) => {
     if (error) {
       // Handle error (scanning will be stopped automatically)
-      console.error('[scanAndConnect] startDeviceScan error', error);
+      logError('[scanAndConnect] startDeviceScan error', error);
       return;
     }
     if (device?.name) {
@@ -76,11 +77,11 @@ export const bleScan = async () => {
 
 const connectDevice = async (device: Device) => {
   if (device.name !== MZDS01_NAME) {
-    // console.debug('[connectDevice] device is not MZDS01');
+    // logMsg('[connectDevice] device is not MZDS01');
     return;
   }
   if (device.name === MZDS01_NAME) {
-    console.debug('[connectDevice] connecting to MZDS01');
+    logMsg('[connectDevice] connecting to MZDS01');
     // const isInitialScan = !useStartupStore.getState().initialScan;
     // if (isInitialScan) {
     //   await device.cancelConnection();
@@ -120,7 +121,7 @@ const connectDevice = async (device: Device) => {
       })
       .catch(error => {
         // Handle errors
-        console.error('[connectDevice] {MZDS01} error', error);
+        logError('[connectDevice] {MZDS01} error', error);
       });
   }
 };
@@ -133,14 +134,15 @@ export const handleAndroidPermissions = () => {
     ]).then(result => {
       if (result) {
         // success
-        console.debug(
+        logMsg(
           '[handleAndroidPermissions] User accepts runtime permissions android 12+',
         );
         useStartupStore.getState().setPermissionGranted(true);
       } else {
         // failure
-        console.error(
+        logError(
           '[handleAndroidPermissions] User refuses runtime permissions android 12+',
+            new Error('User refuses runtime permissions android 12+'),
         );
       }
     });
@@ -149,7 +151,7 @@ export const handleAndroidPermissions = () => {
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     ).then(checkResult => {
       if (checkResult) {
-        console.debug(
+        logMsg(
           '[handleAndroidPermissions] runtime permission Android <12 already OK',
         );
       } else {
@@ -158,21 +160,22 @@ export const handleAndroidPermissions = () => {
         ).then(requestResult => {
           if (requestResult) {
             // success
-            console.debug(
+            logMsg(
               '[handleAndroidPermissions] User accepts runtime permission android <12',
             );
             useStartupStore.getState().setPermissionGranted(true);
           } else {
             // failure
-            console.error(
+            logError(
               '[handleAndroidPermissions] User refuses runtime permission android <12',
+                new Error('User refuses runtime permission android <12'),
             );
           }
         });
       }
     });
   } else {
-    console.debug(
+    logMsg(
       '[handleAndroidPermissions] runtime permission not needed for this platform',
     );
     useStartupStore.getState().setPermissionGranted(true);
@@ -182,19 +185,19 @@ export const handleAndroidPermissions = () => {
 export const enableBluetooth = () => {
   // TODO: this function is broken if bluetooth is already enabled.
   //  to be replaced with a bluetooth power library
-  // console.debug('[enableBluetooth] enabling bluetooth...');
+  // logMsg('[enableBluetooth] enabling bluetooth...');
   // if (Platform.OS === 'android') {
   //   bleManager
   //     .enable()
   //     .then(() => {
-  //       console.debug('[enableBluetooth] Bluetooth is enabled');
+  //       logMsg('[enableBluetooth] Bluetooth is enabled');
   //       useStartupStore.getState().setBluetoothEnabled(true);
   //     })
   //     .catch(error => {
-  //       console.error('[enableBluetooth] Bluetooth is NOT enabled', error);
+  //       logError('[enableBluetooth] Bluetooth is NOT enabled', error);
   //     });
   // } else {
-  //   console.debug('[enableBluetooth] Bluetooth is enabled');
+  //   logMsg('[enableBluetooth] Bluetooth is enabled');
   useStartupStore.getState().setBluetoothEnabled(true);
   // }
 };

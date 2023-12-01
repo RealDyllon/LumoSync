@@ -15,6 +15,10 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import GroupProgramMode from './src/components/GroupProgramMode';
 import {NotifierWrapper} from 'react-native-notifier';
 
+if (!SENTRY_DSN) {
+  console.error('Missing SENTRY_DSN');
+}
+
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
 
 Sentry.init({

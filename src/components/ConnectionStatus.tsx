@@ -40,8 +40,8 @@ const ConnectionStatus = ({peripheral}: Props) => {
 
   return (
     <View style={styles.container}>
-      <Icon name={connectionStatusIcon} size={24} />
-      <Text>{connectionStatusText}</Text>
+      <Icon color="#555555" name={connectionStatusIcon} size={24} />
+      <Text style={styles.connectionStatusText}>{connectionStatusText}</Text>
     </View>
   );
 };
@@ -55,4 +55,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
+  connectionStatusIcon: {
+    color: ""
+  },
+  connectionStatusText: {
+    color: '#555555'
+  }
 });

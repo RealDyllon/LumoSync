@@ -15,7 +15,7 @@
     "@my01/react-native-ble-plx": "^2.1.1",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
-    "@sentry/react-native": "^5.7.1",
+    "@sentry/react-native": "^5.14.1",
     "buffer": "^6.0.3",
     "react": "18.2.0",
     "react-native": "0.72.3",

@@ -13,6 +13,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {usePeripheralStore, useStartupStore} from '../../state';
 import {Peripheral} from '../../utils/ble';
 import React from 'react';
+import {Button} from "react-native-paper";
 
 export const PeripheralsScreen = () => {
   const isBluetoothEnabled = useStartupStore(state => state.isBluetoothEnabled);
@@ -78,7 +79,7 @@ export const PeripheralsScreen = () => {
         {Array.from(peripherals.values()).length === 0 && (
           <View style={styles.row}>
             <Text style={styles.noPeripherals}>
-              No Peripherals, press "Scan Bluetooth" above.
+              No Peripherals.
             </Text>
           </View>
         )}
@@ -89,6 +90,16 @@ export const PeripheralsScreen = () => {
           renderItem={renderItem}
           keyExtractor={item => item.device.id}
         />
+
+        <Button
+          mode="contained"
+          onPress={() => {
+            throw new Error("My first Sentry error!")
+          }}
+          style={{margin: 10}}>
+          Create error (Test Logging)
+        </Button>
+
       </SafeAreaView>
     </>
   );
@@ -129,7 +140,7 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: '#0082FC',
     flex: 1,
-    paddingBottom: 12,
+    paddingBottom: 482,
   },
   sectionContainer: {
     marginTop: 32,

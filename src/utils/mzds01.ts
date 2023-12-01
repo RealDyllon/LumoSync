@@ -6,6 +6,7 @@ import {
 } from '@my01/react-native-ble-plx';
 import {bleManager} from './ble';
 import {usePeripheralStore} from '../state';
+import {logError} from "./logger";
 
 var Buffer = require('@craftzdog/react-native-buffer').Buffer;
 
@@ -25,8 +26,8 @@ export interface Properties {
   lightMode: LightMode;
   brightness: number;
   color: string;
-  strobe: boolean;
-  strobeFreq: number;
+  // strobe: boolean;
+  // strobeFreq: number;
 }
 
 export const defaultProperties: Properties = {
@@ -35,8 +36,8 @@ export const defaultProperties: Properties = {
   lightMode: lightMode.WARM_WHITE,
   brightness: 40,
   color: '#2dff08', // todo?
-  strobe: false,
-  strobeFreq: 1,
+  // strobe: false,
+  // strobeFreq: 1,
 };
 
 export const codes = {
@@ -157,6 +158,8 @@ const writeData = async (deviceIds: string | string[], data: Base64) => {
             }
           }
         }
+      }).catch(err => {
+        logError('[writeData] discoverAllServicesAndCharacteristics error', err)
       });
     });
   });
