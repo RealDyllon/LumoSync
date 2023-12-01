@@ -43,13 +43,13 @@ export const HomeScreen = ({navigation}: ScreenProps<'Home'>) => {
   return (
     <View>
       <SystemStatusBar barStyle="light-content" />
-      {!isPermissionGranted ? null : (
+      {!isPermissionGranted && (
         <View style={styles.warningContainer}>
           <Icon name="bluetooth-off" size={18} color="black" />
           <Text>Bluetooth permission has not been granted. It's required to use this app</Text>
         </View>
       )}
-      {!isBluetoothEnabled ? null : (
+      {!isBluetoothEnabled && (
         <View style={styles.warningContainer}>
           <Icon name="bluetooth-off" size={18} color="black" />
           <Text>Bluetooth is not enabled</Text>
