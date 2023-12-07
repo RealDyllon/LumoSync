@@ -129,6 +129,7 @@ const connectDevice = async (device: Device) => {
 export const handleAndroidPermissions = () => {
   if (Platform.OS === 'android' && Platform.Version >= 31) {
     PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
       PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
     ]).then(result => {
