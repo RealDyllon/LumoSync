@@ -135,12 +135,13 @@ export const handleAndroidPermissions = () => {
     ]).then(result => {
       if (result) {
         // success
+        useStartupStore.getState().setPermissionGranted(true);
         logMsg(
           '[handleAndroidPermissions] User accepts runtime permissions android 12+',
         );
-        useStartupStore.getState().setPermissionGranted(true);
       } else {
         // failure
+        useStartupStore.getState().setPermissionDenied(true);
         logError(
           '[handleAndroidPermissions] User refuses runtime permissions android 12+',
             new Error('User refuses runtime permissions android 12+'),
@@ -152,27 +153,17 @@ export const handleAndroidPermissions = () => {
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
     ).then(checkResult => {
       if (checkResult) {
+        useStartupStore.getState().setPermissionGranted(true);
         logMsg(
           '[handleAndroidPermissions] runtime permission Android <12 already OK',
         );
       } else {
-        PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        ).then(requestResult => {
-          if (requestResult) {
-            // success
-            logMsg(
-              '[handleAndroidPermissions] User accepts runtime permission android <12',
-            );
-            useStartupStore.getState().setPermissionGranted(true);
-          } else {
-            // failure
-            logError(
-              '[handleAndroidPermissions] User refuses runtime permission android <12',
-                new Error('User refuses runtime permission android <12'),
-            );
-          }
-        });
+        // failure
+        useStartupStore.getState().setPermissionDenied(true);
+        logError(
+          '[handleAndroidPermissions] User refuses runtime permission android <12',
+          new Error('User refuses runtime permission android <12'),
+        );
       }
     });
   } else {

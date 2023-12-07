@@ -8,6 +8,8 @@ interface StartupState {
   setBluetoothEnabled: (isBluetoothEnabled: boolean) => void;
   isPermissionGranted: boolean;
   setPermissionGranted: (isPermissionGranted: boolean) => void;
+  isPermissionDenied: boolean;
+  setPermissionDenied: (isPermissionDenied: boolean) => void;
 }
 
 export const useStartupStore = create<StartupState>()(
@@ -20,5 +22,8 @@ export const useStartupStore = create<StartupState>()(
     isPermissionGranted: false,
     setPermissionGranted: (isPermissionGranted: boolean) =>
       set({isPermissionGranted}),
+    isPermissionDenied: false,
+    setPermissionDenied: (isPermissionDenied: boolean) =>
+      set({isPermissionDenied}),
   })),
 );
