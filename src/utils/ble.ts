@@ -19,6 +19,7 @@ export const bleManager = new BleManager();
 const scanOptions: ScanOptions = {
   allowDuplicates: false,
   scanMode: ScanMode.LowLatency,
+  legacyScan: true,
   // callbackType: ScanCallbackType.AllMatches
 };
 

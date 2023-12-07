@@ -24,6 +24,7 @@ import PeripheralControl from '../screens/PeripheralControl';
 import GroupControl from '../screens/GroupControl';
 import ConnectionStatus from '../components/ConnectionStatus';
 import {setProperty} from '../utils/mzds01';
+import {LogViewerScreen} from "../screens/LogViewer";
 
 // change above to as const
 export const Routes = {
@@ -31,6 +32,7 @@ export const Routes = {
   Peripherals: 'Peripherals',
   PeripheralControl: 'PeripheralControl',
   GroupControl: 'GroupControl',
+  Logs: 'Logs',
 } as const;
 
 export type Routes = (typeof Routes)[keyof typeof Routes];
@@ -40,6 +42,7 @@ type StackParamList = {
   [Routes.Peripherals]: undefined;
   [Routes.PeripheralControl]: {deviceId: string};
   [Routes.GroupControl]: undefined;
+  [Routes.Logs]: undefined;
 };
 
 export type ScreenProps<T extends keyof typeof Routes> = NativeStackScreenProps<
@@ -206,12 +209,22 @@ export const RootNavigation = () => {
             title: 'LumoSync',
             headerLeft: () => <HomeHeaderLeft />,
             headerRight: () => (
-              <IconButton
-                icon="bug"
-                iconColor={MD3Colors.tertiary50}
-                // mode="contained-tonal"
-                onPress={() => navigation.navigate(Routes.Peripherals)}
-              />
+              <View style={{
+                flexDirection: 'row',
+              }}>
+                <IconButton
+                  icon="script-text"
+                  iconColor={MD3Colors.tertiary50}
+                  // mode="contained-tonal"
+                  onPress={() => navigation.navigate(Routes.Logs)}
+                />
+                <IconButton
+                  icon="bug"
+                  iconColor={MD3Colors.tertiary50}
+                  // mode="contained-tonal"
+                  onPress={() => navigation.navigate(Routes.Peripherals)}
+                />
+              </View>
             ),
             headerTitleAlign: 'center',
             navigationBarColor: 'white',
@@ -248,6 +261,13 @@ export const RootNavigation = () => {
           component={GroupControl}
           options={() => ({
             title: 'Group Control',
+          })}
+        />
+        <Stack.Screen
+          name={Routes.Logs}
+          component={LogViewerScreen}
+          options={() => ({
+            title: 'Logs',
           })}
         />
       </Stack.Navigator>
