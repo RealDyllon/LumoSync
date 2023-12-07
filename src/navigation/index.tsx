@@ -19,7 +19,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {PeripheralsScreen} from '../screens/Peripherals';
 import {StyleSheet, View} from 'react-native';
-import {usePeripheralStore} from '../state';
+import {usePeripheralStore, useStartupStore} from '../state';
 import PeripheralControl from '../screens/PeripheralControl';
 import GroupControl from '../screens/GroupControl';
 import ConnectionStatus from '../components/ConnectionStatus';
@@ -59,23 +59,23 @@ const theme = {
 
 const HomeHeaderLeft = () => {
   const isScanning = usePeripheralStore(state => state.isScanning);
+  const isBluetoothEnabled = useStartupStore(state => state.isBluetoothEnabled);
   return (
     <View style={styles.homeHeaderActivityIndicatorContainer}>
-      {isScanning ?
-        <>
+      {isScanning &&
           <ActivityIndicator size="small" style={{
             position: 'absolute',
             zIndex: 1,
             top: 0
-          }} />
-          <Icon
-            style={{
+          }} /> }
+      {isBluetoothEnabled &&  <Icon
+          style={{
             position: 'absolute',
             zIndex: 2,
             top: 4,
             left: 4
           }} name="bluetooth" size={16} color={MD3Colors.primary50} />
-        </> : null}
+      }
     </View>
   );
 };
