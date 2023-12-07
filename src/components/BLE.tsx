@@ -20,12 +20,10 @@ const BLE = () => {
   const isBluetoothEnabled = useStartupStore(state => state.isBluetoothEnabled);
   const setBluetoothEnabled = useStartupStore(state => state.setBluetoothEnabled);
 
-  // console.log('isBluetoothEnabled', isBluetoothEnabled);
-  // console.log('isPermissionGranted', isPermissionGranted);
-
   let scanInterval: NodeJS.Timer;
 
   const continuousScan = () => {
+
     bleScan().then(() => {});
 
     // Schedule subsequent scans every x seconds
@@ -33,39 +31,48 @@ const BLE = () => {
     scanInterval = setInterval(bleScan, interval);
   };
 
-  useEffect(() => {
-    handleAndroidPermissions();
-  }, []);
+  // // handled in ble state listener
+  // useEffect(() => {
+  //   handleAndroidPermissions();
+  // }, []);
 
   useEffect(() => {
-    if (isPermissionGranted) {
-      // enableBluetooth();
-    }
-  }, [isPermissionGranted]);
-
-  useEffect(() => {
-    if (isPermissionGranted) {
       const subscription = bleManager.onStateChange(state => {
-        if (state === BleManagerState.PoweredOn) {
-          logMsg('bluetooth is on')
-          setBluetoothEnabled(true);
-          continuousScan();
-        } else {
-          logMsg('bluetooth is not on')
-          setBluetoothEnabled(false);
-          bleManager.enable().catch(error => {
-            logError('Failed to enable bluetooth', error);
-          })
+        switch (state) {
+          case BleManagerState.PoweredOff:
+            clearInterval(scanInterval);
+            setBluetoothEnabled(false);
+            logMsg('bluetooth is off, enabling...')
+            bleManager.enable().catch(error => {
+              logError('Failed to enable bluetooth', error);
+            })
+            break;
+          case BleManagerState.Unauthorized:
+            clearInterval(scanInterval);
+            logError("Bluetooth permissions not granted", new Error('Bluetooth permissions not granted'))
+            handleAndroidPermissions();
+            break;
+          case BleManagerState.PoweredOn:
+            setBluetoothEnabled(true);
+            logMsg('bluetooth is on')
+            handleAndroidPermissions(); // sometimes state is powered on but permissions are not granted...
+            continuousScan();
+            break;
+          default:
+            clearInterval(scanInterval);
+            logError(`Unsupported BLE state: ${state}`, new Error('Unsupported BLE state:' + state))
+            break;
         }
+
       }, true);
       return () => {
         bleManager.stopDeviceScan();
         clearInterval(scanInterval);
         subscription.remove();
       };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bleManager, bleManager.state, isPermissionGranted, isBluetoothEnabled]);
+  }, [
+    // bleManager, bleManager.state, isPermissionGranted, isBluetoothEnabled
+  ]);
 
   const peripherals = usePeripheralStore(state => state.peripherals);
   const setPeripheral = usePeripheralStore(state => state.setPeripheral);

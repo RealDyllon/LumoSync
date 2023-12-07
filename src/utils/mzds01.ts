@@ -65,6 +65,30 @@ export const codes = {
   // TODO: add more codes
 } as const;
 
+interface CharConfig {
+  serviceUUID: string;
+  uuid: string;
+}
+
+export const chars = {
+  power: {
+    serviceUUID: "fa879af4-d601-420c-b2b4-07ffb528dde3",
+    uuid: "b02eaeaa-f6bc-4a7e-bc94-f7b7fc8ded0b"
+  },
+  lightMode: {
+    serviceUUID: "fa879af4-d601-420c-b2b4-07ffb528dde3",
+    uuid: "b02eaeaa-f6bc-4a7e-bc94-f7b7fc8ded0b"
+  },
+  brightness: {
+    serviceUUID: "fa879af4-d601-420c-b2b4-07ffb528dde3",
+    uuid: "b02eaeaa-f6bc-4a7e-bc94-f7b7fc8ded0b"
+  },
+  color: {
+    serviceUUID: "fa879af4-d601-420c-b2b4-07ffb528dde3",
+    uuid: "b02eaeaa-f6bc-4a7e-bc94-f7b7fc8ded0b"
+  }
+} as const
+
 const colorHexToBase64 = (hex: string) => {
   const colorHexValue = hex.substring(1).concat('00');
   const colorEncodedValue = Buffer.from(colorHexValue, 'hex').toString(
@@ -88,7 +112,7 @@ export const setProperty = async <
       break;
     case 'power':
       // console.debug('[setProperty] power', value);
-      await writeData(deviceIds, codes.power[value ? 'on' : 'off']);
+      await writeDataToSpecificChar(deviceIds, codes.power[value ? 'on' : 'off'], chars.power);
       break;
     case 'lightMode':
       // console.debug('[setProperty] lightMode', value);
@@ -101,10 +125,12 @@ export const setProperty = async <
         // console.debug('[setProperty] lightMode {STATIC_COLOR}', color);
         if (color) {
           const colorPayload = colorHexToBase64(color as string);
-          await writeData(deviceIds, colorPayload);
+          // await writeData(deviceIds, colorPayload);
+          writeDataToSpecificChar(deviceIds, colorPayload, chars.lightMode)
         }
       } else {
-        await writeData(deviceIds, codes.lightMode[value as LightMode]);
+        // await writeData(deviceIds, codes.lightMode[value as LightMode]);
+        writeDataToSpecificChar(deviceIds, codes.lightMode[value as LightMode], chars.lightMode)
       }
       break;
     case 'brightness':
@@ -116,7 +142,8 @@ export const setProperty = async <
       ).toString('base64');
       const brightnessPayload =
         codes.brightness.prefix + brightnessEncodedValue;
-      await writeData(deviceIds, brightnessPayload);
+      // await writeData(deviceIds, brightnessPayload);
+      await writeDataToSpecificChar(deviceIds, brightnessPayload, chars.brightness)
       break;
     case 'color':
       // console.debug('[setProperty] color', value);
@@ -124,7 +151,8 @@ export const setProperty = async <
         break;
       }
       const colorPayload = colorHexToBase64(value as string);
-      await writeData(deviceIds, colorPayload);
+      // await writeData(deviceIds, colorPayload);
+      await writeDataToSpecificChar(deviceIds, colorPayload, chars.color)
       break;
     default:
       console.warn('[setProperty] unknown property', property);
@@ -165,33 +193,55 @@ const writeData = async (deviceIds: string | string[], data: Base64) => {
   });
 };
 
+const writeDataToSpecificChar = async (deviceIds: string | string[], data: Base64, char: CharConfig) => {
+  const ids = Array.isArray(deviceIds) ? deviceIds : [deviceIds];
+  bleManager.devices(ids).then(devices => {
+    devices.forEach(async (device, _i) => {
+      await device.writeCharacteristicWithResponseForService(
+        char.serviceUUID,
+        char.uuid,
+        data,
+      );
+    })
+  })
+}
+
+const writeToAllChars = async (
+  dev: Device,
+  service: Service,
+  characteristics: Characteristic[],
+  data: Base64,
+) => {
+  for (const characteristic of characteristics) {
+    if (characteristic.isWritableWithResponse) {
+      await dev.writeCharacteristicWithResponseForService(
+        service.uuid,
+        characteristic.uuid,
+        data,
+      );
+    }
+  }
+};
+
+export const resetDevice = async (dev: Device) => {
+  // todo: reset device to defaults (white, 40% brightness)
+  await setProperty(dev.id, 'power', true);
+  await setProperty(dev.id, 'lightMode', lightMode.WARM_WHITE);
+  await setProperty(dev.id, 'brightness', 40);
+}
+
 export const pairDevice = async (dev: Device) => {
   console.log('writing to chars');
 
   const services = await dev.services();
 
-  const writeChars = async (
-    service: Service,
-    characteristics: Characteristic[],
-    data: Base64,
-  ) => {
-    for (const characteristic of characteristics) {
-      if (characteristic.isWritableWithResponse) {
-        await dev.writeCharacteristicWithResponseForService(
-          service.uuid,
-          characteristic.uuid,
-          data,
-        );
-      }
-    }
-  };
-
   for (const service of services) {
     const characteristics = await dev.characteristicsForService(service.uuid);
-    await writeChars(service, characteristics, codes.pairing['1']);
-    await writeChars(service, characteristics, codes.pairing['2']);
-    await writeChars(service, characteristics, codes.pairing['3']);
-    await writeChars(service, characteristics, codes.pairing['4']);
+    await writeToAllChars(dev, service, characteristics, codes.pairing['1']);
+    await writeToAllChars(dev, service, characteristics, codes.pairing['2']);
+    await writeToAllChars(dev, service, characteristics, codes.pairing['3']);
+    await writeToAllChars(dev, service, characteristics, codes.pairing['4']);
     // todo: read values from device
+    await resetDevice(dev);
   }
 };

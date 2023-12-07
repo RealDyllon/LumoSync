@@ -17,7 +17,7 @@ export const logMsg = (message: string, additional?: string) => {
 }
 
 export const logError = (text: string, error: Error, extra?: any) => {
-  useLogsStore.getState().addLog(`ERROR: ${text} -- ${error.message} -- ${extra}`);
+  useLogsStore.getState().addLog(`ERROR: ${text} -- ${error.message} -- ${extra ?? ""}`);
   // if (__DEV__) {
     console.error(text, error);
   // } else {

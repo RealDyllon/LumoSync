@@ -18,7 +18,8 @@ export const bleManager = new BleManager();
 
 const scanOptions: ScanOptions = {
   allowDuplicates: false,
-  scanMode: ScanMode.LowLatency,
+  // scanMode: ScanMode.LowLatency,
+  scanMode: ScanMode.Balanced,
   legacyScan: true,
   // callbackType: ScanCallbackType.AllMatches
 };
@@ -132,6 +133,7 @@ export const handleAndroidPermissions = () => {
         const success = result === PermissionsAndroid.RESULTS.GRANTED
         if (success) {
           useStartupStore.getState().setPermissionGranted(true);
+          logMsg('[handleAndroidPermissions] Success: User grants runtime permissions android <12');
         } else {
           logError(
             '[handleAndroidPermissions] User refuses runtime permissions android <12',
@@ -153,6 +155,7 @@ export const handleAndroidPermissions = () => {
         )
         if (success) {
           useStartupStore.getState().setPermissionGranted(true);
+          logMsg('[handleAndroidPermissions] Success: User grants runtime permissions android 12+')
         } else {
           logError(
             '[handleAndroidPermissions] User refuses runtime permissions android 12+',
