@@ -55,7 +55,7 @@ export const HomeScreen = ({navigation}: ScreenProps<'Home'>) => {
         keyExtractor={item => item.device.id}
         ListHeaderComponent={GroupedLightsCard}
         ListFooterComponent={<View>
-          <Text>Build 20231207002</Text>
+          <Text>Build 20231207003</Text>
         </View>
       }
         ListEmptyComponent={ListEmptyComponent}

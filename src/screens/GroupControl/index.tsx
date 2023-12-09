@@ -68,6 +68,11 @@ const GroupControl = () => {
       ...groupedPeripheralProperties.programMode,
       enabled: !groupedPeripheralProperties.programMode.enabled,
     });
+    // if program is disabled, force all peripherals back to group state
+    // todo: move this block to state handler in zustand
+    // setGroupedPeripheralProperty('power', groupedPeripheralProperties.power)
+    // todo: remaining attributes
+    // todo: do smth similar when removing from group
   };
 
   return (

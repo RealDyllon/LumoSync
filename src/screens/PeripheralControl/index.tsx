@@ -6,6 +6,7 @@ import {ScreenProps} from '../../navigation';
 import {usePeripheralStore} from '../../state';
 import {LightControls} from '../../components/LightControls';
 import {PeripheralProperties} from '../../utils';
+// import {DebugControl} from "./DebugControl";
 
 const PeripheralControl = ({
   route,
@@ -50,6 +51,7 @@ const PeripheralControl = ({
       style={{
         paddingBottom: 20,
       }}>
+      {/*<DebugControl dev={peripheral.device} />*/}
       <LightControls
         peripheralId={peripheralId}
         properties={peripheral.properties}

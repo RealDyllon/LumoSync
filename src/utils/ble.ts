@@ -1,14 +1,5 @@
-import {
-  BleManager,
-  Device,
-  ScanMode,
-  ScanOptions,
-} from 'react-native-ble-plx';
-import {
-  defaultProperties,
-  MZDS01_NAME,
-  pairDevice as pairMZDS01,
-} from './mzds01';
+import {BleManager, Device, ScanMode, ScanOptions,} from 'react-native-ble-plx';
+import {defaultProperties, MZDS01_NAME, pairDevice as pairMZDS01,} from './mzds01';
 import {DEVICE_NAME, PeripheralProperties} from './index';
 import {usePeripheralStore, useStartupStore} from '../state';
 import {PermissionsAndroid, Platform} from 'react-native';
@@ -27,7 +18,9 @@ export const bleManager = new BleManager();
 
 const scanOptions: ScanOptions = {
   allowDuplicates: false,
-  scanMode: ScanMode.LowLatency,
+  // scanMode: ScanMode.LowLatency,
+  scanMode: ScanMode.Balanced,
+  legacyScan: true,
   // callbackType: ScanCallbackType.AllMatches
 };
 
@@ -127,49 +120,50 @@ const connectDevice = async (device: Device) => {
 };
 
 export const handleAndroidPermissions = () => {
-  if (Platform.OS === 'android' && Platform.Version >= 31) {
-    PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
-      PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-    ]).then(result => {
-      if (result) {
-        // success
-        useStartupStore.getState().setPermissionGranted(true);
-        logMsg(
-          '[handleAndroidPermissions] User accepts runtime permissions android 12+',
-        );
-      } else {
-        // failure
-        useStartupStore.getState().setPermissionDenied(true);
-        logError(
-          '[handleAndroidPermissions] User refuses runtime permissions android 12+',
+
+  if (Platform.OS === 'ios') {
+    return true
+  }
+  if (Platform.OS === 'android' && PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION) {
+    const apiLevel = parseInt(Platform.Version.toString(), 10)
+
+    if (apiLevel < 31) {
+      return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then(result => {
+        // todo
+        const success = result === PermissionsAndroid.RESULTS.GRANTED
+        if (success) {
+          useStartupStore.getState().setPermissionGranted(true);
+          logMsg('[handleAndroidPermissions] Success: User grants runtime permissions android <12');
+        } else {
+          logError(
+            '[handleAndroidPermissions] User refuses runtime permissions android <12',
+            new Error('User refuses runtime permissions android <12'),
+          );
+        }
+        return success
+      })
+    }
+
+    if (PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN && PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT) {
+      return PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN,
+        PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT
+      ]).then(result => {
+        const success: boolean = (
+          result['android.permission.BLUETOOTH_CONNECT'] === PermissionsAndroid.RESULTS.GRANTED &&
+          result['android.permission.BLUETOOTH_SCAN'] === PermissionsAndroid.RESULTS.GRANTED
+        )
+        if (success) {
+          useStartupStore.getState().setPermissionGranted(true);
+          logMsg('[handleAndroidPermissions] Success: User grants runtime permissions android 12+')
+        } else {
+          logError(
+            '[handleAndroidPermissions] User refuses runtime permissions android 12+',
             new Error('User refuses runtime permissions android 12+'),
-        );
-      }
-    });
-  } else if (Platform.OS === 'android' && Platform.Version >= 23) {
-    PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    ).then(checkResult => {
-      if (checkResult) {
-        useStartupStore.getState().setPermissionGranted(true);
-        logMsg(
-          '[handleAndroidPermissions] runtime permission Android <12 already OK',
-        );
-      } else {
-        // failure
-        useStartupStore.getState().setPermissionDenied(true);
-        logError(
-          '[handleAndroidPermissions] User refuses runtime permission android <12',
-          new Error('User refuses runtime permission android <12'),
-        );
-      }
-    });
-  } else {
-    logMsg(
-      '[handleAndroidPermissions] runtime permission not needed for this platform',
-    );
-    useStartupStore.getState().setPermissionGranted(true);
+          );
+        }
+        return success
+      });
+    }
   }
 };
