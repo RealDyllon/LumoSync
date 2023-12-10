@@ -10,8 +10,9 @@ import {
   Subscription,
 } from 'react-native-ble-plx';
 import {logError, logMsg} from "../utils/logger";
-import {useRoute} from "@react-navigation/native";
 import {Routes} from "../navigation";
+import {useNavigationStore} from "../state/navigation";
+
 
 const SCAN_INTERVAL = 10; // seconds
 
@@ -24,11 +25,12 @@ const BLE = () => {
 
   let scanInterval: NodeJS.Timer;
 
-  const route = useRoute();
-  const routePath = route.name;
-
   const scanIfOnHomeScreen = () => {
-    if (routePath === Routes.Home) {
+    const currentRoute = useNavigationStore.getState().currentRoute;
+    console.log("currentRoute (scanIfOnHomeScreen)", currentRoute)
+
+    if (currentRoute === Routes.Home) {
+      console.log("scanning...")
       bleScan().then(() => {});
     }
   }

@@ -66,6 +66,12 @@ You've successfully run and modified your React Native App. :partying_face:
 
 # Troubleshooting
 
+You may need to enable adb reverse if you're using a physical Android device.
+
+```bash
+adb reverse tcp:8081 tcp:8081
+```
+
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
 # Learn More
