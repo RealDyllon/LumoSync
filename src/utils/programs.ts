@@ -120,7 +120,7 @@ const fade = (ids: string[]): Program => {
     lightMode: lightMode.WARM_WHITE,
     brightness: 40,
   };
-  const keyframes: ProgramKeyFrame[] = [10, 20, 30, 40].map(
+  const keyframes: ProgramKeyFrame[] = [40, 30, 20, 10, 20, 30].map(
     (brightness, index) => {
       const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill({
         ...lightOn,
