@@ -29,8 +29,20 @@ const GroupProgramMode = () => {
         return programs.everyOtherLight(connectedGroupedPeripherals);
       case programModes.CHRISTMAS_LIGHTS:
         return programs.christmasLights(connectedGroupedPeripherals);
+      case programModes.CHRISTMAS_LIGHTS2:
+        return programs.christmasLights2(connectedGroupedPeripherals);
       case 'FADE':
         return programs.fade(connectedGroupedPeripherals);
+      case 'RGB':
+        return programs.rgb(connectedGroupedPeripherals);
+      case programModes.RGB_UNISON:
+        return programs.rgbUnison(connectedGroupedPeripherals);
+      case programModes.RGB_CHASE:
+        return programs.rgbChase(connectedGroupedPeripherals);
+      case programModes.NEON:
+        return programs.neon(connectedGroupedPeripherals);
+      case programModes.NEON2:
+        return programs.neon2(connectedGroupedPeripherals);
       default:
         console.warn('[GroupProgramMode] unknown program', programMode.program);
         return programs.chasingLight(connectedGroupedPeripherals);

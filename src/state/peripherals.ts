@@ -10,7 +10,13 @@ export const programModes = {
   CHASING_LIGHT: 'CHASING_LIGHT',
   EVERY_OTHER_LIGHT: 'EVERY_OTHER_LIGHT',
   CHRISTMAS_LIGHTS: 'CHRISTMAS_LIGHTS',
+  CHRISTMAS_LIGHTS2: 'CHRISTMAS_LIGHTS2',
   FADE: 'FADE',
+  RGB: 'RGB',
+  RGB_UNISON: 'RGB_UNISON',
+  RGB_CHASE: 'RGB_CHASE',
+  NEON: 'NEON',
+  NEON2: 'NEON2',
 } as const;
 
 export type ProgramMode = keyof typeof programModes;
