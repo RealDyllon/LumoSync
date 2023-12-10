@@ -30,7 +30,7 @@ const programsOptions: ProgramOption[] = [
   {label: 'Chasing Light', value: programModes.CHASING_LIGHT},
   {label: 'Every Other Light', value: programModes.EVERY_OTHER_LIGHT},
   {label: 'Christmas Lights', value: programModes.CHRISTMAS_LIGHTS},
-  // {label: 'Christmas Lights 2', value: programModes.CHRISTMAS_LIGHTS2},
+  {label: 'Christmas Lights 2', value: programModes.CHRISTMAS_LIGHTS2},
   {label: 'Fade', value: programModes.FADE},
   {label: 'RGB Brightness Chase', value: programModes.RGB},
   {label: 'RGB Unison', value: programModes.RGB_UNISON},

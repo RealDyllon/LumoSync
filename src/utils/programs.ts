@@ -195,19 +195,8 @@ const rgbUnison = (ids: string[]): Program => {
   const green: ProgramKeyFramePeripheral = {...red, color: '#00ff00'};
   const blue: ProgramKeyFramePeripheral = {...red, color: '#0000ff'};
 
-  const keyframes: ProgramKeyFrame[] = [0, 1, 2].map((_num, keyframeIndex) => {
-    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).map((p, i) => {
-      switch (keyframeIndex % 3) {
-        case 0:
-          return red;
-        case 1:
-          return green;
-        case 2:
-          return blue;
-        default:
-          return red;
-      }
-    });
+  const keyframes: ProgramKeyFrame[] = [red, green, blue].map((properties, keyframeIndex) => {
+    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill(properties)
     return {
       peripherals: new Map(arr.map((p, i) => [ids[i], p])),
     };
@@ -229,7 +218,8 @@ const rgbChase = (ids: string[]): Program => {
   const blue: ProgramKeyFramePeripheral = {...red, color: '#0000ff'};
 
   const keyframes: ProgramKeyFrame[] = [0, 1, 2].map((_num, keyframeIndex) => {
-    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).map((p, i) => {
+    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill(red)
+      .map((p, i) => {
       switch ((i + keyframeIndex) % 3) {
         case 0:
           return red;
@@ -267,8 +257,9 @@ const neon = (ids: string[]): Program => {
   const neonPink: ProgramKeyFramePeripheral = {...neonRed, color: '#ff0080'};
 
   // define keyframes
-  const keyframes: ProgramKeyFrame[] = [0, 1, 2].map((_num, keyframeIndex) => {
-    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).map((p, i) => {
+  const keyframes: ProgramKeyFrame[] = [0, 1, 2, 3, 4, 5, 6].map((colorOffset, keyframeIndex) => {
+    console.log("keyframeIndex", keyframeIndex)
+    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill(neonRed).map((p, i) => {
       switch ((i + keyframeIndex) % 7) {
         case 0:
           return neonRed;
@@ -314,37 +305,12 @@ const neon2 = (ids: string[]): Program => {
   const neonPink: ProgramKeyFramePeripheral = {...neonRed, color: '#ff0080'};
 
   // define keyframes
-  const keyframes: ProgramKeyFrame[] = [0, 1, 2, 4, 5, 6].map((_num, keyframeIndex) => {
-    let fillColor: ProgramKeyFramePeripheral;
+  const keyframes: ProgramKeyFrame[] = [
+    neonRed, neonOrange, neonYellow, neonGreen, neonBlue, neonPurple, neonPink
+  ].map((neonColor, _keyframeIndex) => {
+    console.log("keyframeIndex", _keyframeIndex)
 
-    switch (keyframeIndex) {
-      case 0:
-        fillColor = neonRed;
-        break;
-      case 1:
-        fillColor = neonOrange;
-        break;
-      case 2:
-        fillColor = neonYellow;
-        break;
-      case 3:
-        fillColor = neonGreen;
-        break;
-      case 4:
-        fillColor = neonBlue;
-        break;
-      case 5:
-        fillColor = neonPurple;
-        break;
-      case 6:
-        fillColor = neonPink;
-        break;
-      default:
-        fillColor = neonRed;
-        break;
-    }
-
-    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill(fillColor)
+    const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill(neonColor)
 
     return {
       peripherals: new Map(arr.map((p, i) => [ids[i], p])),

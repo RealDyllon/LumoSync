@@ -55,7 +55,7 @@ const GroupProgramMode = () => {
     () => {
       console.debug('[GroupProgramMode useEffect] timeout -> timer=', timer);
 
-      const programCount = timer % groupedPeripherals.size;
+      const programCount = timer % program.keyFrames.length;
       const keyframe = program.keyFrames[programCount];
       for (const id of connectedGroupedPeripherals) {
         const properties = keyframe?.peripherals?.get(id);
@@ -72,7 +72,7 @@ const GroupProgramMode = () => {
       setTimer(prevTime => prevTime + 1);
     },
     programMode.enabled
-      ? program.keyframeDuration * connectedGroupedPeripherals.length
+      ? program.keyframeDuration * program.keyFrames.length
       : null,
   );
 
