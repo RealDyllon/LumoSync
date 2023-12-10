@@ -56,28 +56,30 @@ const PeripheralCard = ({
       }]}
       disabled={isGrouped || !isPaired}>
       <Card.Title title={peripheral.name} />
-      <Card.Actions>
+      <Card.Content style={styles.cardContent}>
         <ConnectionStatus peripheral={peripheral} />
-        <View style={styles.spacer} />
+      </Card.Content>
+      <Card.Actions>
         <Button
           icon={isGrouped ? 'lightbulb-group' : 'plus'}
           // iconColor={light.grouped ? "white" : DefaultTheme.colors.primary}
           mode={isGrouped ? 'contained' : 'contained-tonal'}
           // containerColor={light.grouped ? DefaultTheme.colors.primary : "white"}
-          // @ts-ignore
-          size={28}
           onPress={() => handleGroupToggle(peripheral.device.id)}
           disabled={!isPaired}>
           {isGrouped ? 'Grouped' : 'Add to Group'}
         </Button>
-        <Switch
-          value={peripheral.properties?.power}
-          disabled={isGrouped || !isPaired}
-          onValueChange={() => handlePowerToggle(peripheral.device.id)}
-          style={styles.switch}
-          // color="#FDF4DC"
-          hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-        />
+        <View style={styles.spacer} />
+        <View style={styles.switchContainer}>
+          <Switch
+            value={peripheral.properties?.power}
+            disabled={isGrouped || !isPaired}
+            onValueChange={() => handlePowerToggle(peripheral.device.id)}
+            style={styles.switch}
+            // color="#FDF4DC"
+            hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+          />
+        </View>
       </Card.Actions>
     </Card>
   );
@@ -89,9 +91,18 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 12,
   },
+  cardContent: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    marginTop: -16,
+    marginBottom: -4,
+  },
   switch: {
     // marginRight: 20,
     marginLeft: 8,
+  },
+  switchContainer: {
+    padding: 6
   },
   spacer: {
     flex: 1,
