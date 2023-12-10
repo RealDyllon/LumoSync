@@ -30,7 +30,13 @@ const programsOptions: ProgramOption[] = [
   {label: 'Chasing Light', value: programModes.CHASING_LIGHT},
   {label: 'Every Other Light', value: programModes.EVERY_OTHER_LIGHT},
   {label: 'Christmas Lights', value: programModes.CHRISTMAS_LIGHTS},
-  // {label: 'Fade', value: programModes.FADE},
+  {label: 'Christmas Lights 2', value: programModes.CHRISTMAS_LIGHTS2},
+  {label: 'Fade', value: programModes.FADE},
+  {label: 'RGB Brightness Chase', value: programModes.RGB},
+  {label: 'RGB Unison', value: programModes.RGB_UNISON},
+  {label: 'RGB Chase', value: programModes.RGB_CHASE},
+  {label: 'Neon', value: programModes.NEON},
+  {label: 'Neon 2', value: programModes.NEON2},
 ];
 
 const GroupControl = () => {
@@ -113,6 +119,7 @@ const GroupControl = () => {
           style={{
             marginHorizontal: 20,
           }}>
+          {isProgramDropdownOpen && <Text>More Program Options can be selected by scrolling</Text>}
           <DropDownPicker
             open={isProgramDropdownOpen}
             // value={groupedPeripheralProperties.programMode.program}
@@ -122,6 +129,8 @@ const GroupControl = () => {
             setOpen={setIsProgramDropdownOpen}
             onChangeValue={handleSelectedProgram}
             setValue={setSelectedProgram}
+            autoScroll
+            listMode="SCROLLVIEW"
           />
         </View>
       )}

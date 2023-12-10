@@ -49,7 +49,7 @@ const PeripheralControl = ({
   return (
     <ScrollView
       style={{
-        paddingBottom: 20,
+        paddingBottom: 32,
       }}>
       {/*<DebugControl dev={peripheral.device} />*/}
       <LightControls

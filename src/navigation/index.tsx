@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme, createNavigationContainerRef} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -25,6 +25,7 @@ import GroupControl from '../screens/GroupControl';
 import ConnectionStatus from '../components/ConnectionStatus';
 import {setProperty} from '../utils/mzds01';
 import {LogViewerScreen} from "../screens/LogViewer";
+import {useNavigationStore} from "../state/navigation";
 
 // change above to as const
 export const Routes = {
@@ -196,10 +197,23 @@ const PeripheralControlHeaderRight = ({
   );
 };
 
+export const navigationRef = createNavigationContainerRef();
+
 export const RootNavigation = () => {
   return (
-    <NavigationContainer theme={theme}>
-      <Stack.Navigator>
+    <NavigationContainer theme={theme} ref={navigationRef}>
+      <Stack.Navigator
+        screenListeners={({ navigation }) => ({
+          state: (e) => {
+            if (e.type === "state"){
+              const data = e.data as any
+              const routeName = data?.state?.routes[data?.state?.index]?.name || null
+              console.log('route changed', routeName)
+              useNavigationStore.getState().setCurrentRoute(routeName)
+            }
+          },
+        })}
+      >
         <Stack.Screen
           name={Routes.Home}
           component={HomeScreen}

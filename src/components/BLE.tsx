@@ -10,6 +10,9 @@ import {
   Subscription,
 } from 'react-native-ble-plx';
 import {logError, logMsg} from "../utils/logger";
+import {Routes} from "../navigation";
+import {useNavigationStore} from "../state/navigation";
+
 
 const SCAN_INTERVAL = 10; // seconds
 
@@ -22,13 +25,26 @@ const BLE = () => {
 
   let scanInterval: NodeJS.Timer;
 
+  const scanIfOnHomeScreen = () => {
+    const currentRoute = useNavigationStore.getState().currentRoute;
+    console.log("currentRoute (scanIfOnHomeScreen)", currentRoute)
+
+    if (currentRoute === Routes.Home) {
+      console.log("scanning...")
+      bleScan().then(() => {});
+    }
+  }
+
   const continuousScan = () => {
 
-    bleScan().then(() => {});
+    //check current navigation screen; only scan if on home screen
+
+    // initial scan
+    scanIfOnHomeScreen()
 
     // Schedule subsequent scans every x seconds
     const interval = SCAN_INTERVAL * 1000; // 60 seconds in milliseconds
-    scanInterval = setInterval(bleScan, interval);
+    scanInterval = setInterval(scanIfOnHomeScreen, interval);
   };
 
   // // handled in ble state listener

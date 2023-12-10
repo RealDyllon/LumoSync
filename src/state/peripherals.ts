@@ -10,7 +10,13 @@ export const programModes = {
   CHASING_LIGHT: 'CHASING_LIGHT',
   EVERY_OTHER_LIGHT: 'EVERY_OTHER_LIGHT',
   CHRISTMAS_LIGHTS: 'CHRISTMAS_LIGHTS',
+  CHRISTMAS_LIGHTS2: 'CHRISTMAS_LIGHTS2',
   FADE: 'FADE',
+  RGB: 'RGB',
+  RGB_UNISON: 'RGB_UNISON',
+  RGB_CHASE: 'RGB_CHASE',
+  NEON: 'NEON',
+  NEON2: 'NEON2',
 } as const;
 
 export type ProgramMode = keyof typeof programModes;
@@ -91,7 +97,10 @@ export const usePeripheralStore = create<PeripheralState>()(
     addToGroupedPeripherals: async id => {
       // write grouped properties
       const groupedProperties = get().groupedPeripheralProperties;
-      for (const [key, value] of Object.entries(groupedProperties)) {
+      const {color, ...propertiesWithoutColor} = groupedProperties;
+      const {lightMode, ...propertiesWithoutLightMode} = groupedProperties;
+      const propertiesToWrite = groupedProperties.lightMode === 'STATIC_COLOR' ? propertiesWithoutLightMode : propertiesWithoutColor;
+      for (const [key, value] of Object.entries(propertiesToWrite)) {
         if (key !== 'programMode') {
           await setProperty(
             id,
@@ -108,7 +117,11 @@ export const usePeripheralStore = create<PeripheralState>()(
       // write individual properties
       const properties = get().peripherals.get(id)?.properties;
       if (properties) {
-        for (const [key, value] of Object.entries(properties)) {
+        const {color, ...propertiesWithoutColor} = properties;
+        const {lightMode, ...propertiesWithoutLightMode} = properties;
+        const propertiesToWrite = properties.lightMode === 'STATIC_COLOR' ? propertiesWithoutLightMode : propertiesWithoutColor;
+        for (const [key, value] of Object.entries(propertiesToWrite)) {
+          // console.log('writing', key, value)
           await setProperty(id, key as keyof PeripheralProperties, value);
         }
       }
@@ -146,11 +159,35 @@ export const usePeripheralStore = create<PeripheralState>()(
     },
     groupedPeripheralProperties: {
       ...defaultProperties,
+      lightMode: 'STATIC_COLOR',
+      color: '#ff00ff',
       programMode: {enabled: false, program: 'CHASING_LIGHT'},
     },
     setGroupedPeripheralProperty: async (key, value) => {
       const ids = Array.from(get().groupedPeripherals);
       if (key === 'programMode') {
+        if (!(value as GroupedPeripheralProperties['programMode']).enabled) {
+          // reset all properties to grouped properties
+          await Promise.all(
+            ids.map(id =>
+              {
+                const groupedProperties = get().groupedPeripheralProperties;
+                const {color, ...propertiesWithoutColor} = groupedProperties;
+                const {lightMode, ...propertiesWithoutLightMode} = groupedProperties;
+                const propertiesToWrite = groupedProperties.lightMode === 'STATIC_COLOR' ? propertiesWithoutLightMode : propertiesWithoutColor;
+                for (const [key, value] of Object.entries(propertiesToWrite)) {
+                  if (key !== 'programMode') {
+                    setProperty(
+                      id,
+                      key as keyof PeripheralProperties,
+                      value as string | number | boolean,
+                    );
+                  }
+                }
+              }
+            ),
+          );
+        }
         return set({
           groupedPeripheralProperties: {
             ...get().groupedPeripheralProperties,

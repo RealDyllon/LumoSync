@@ -1,5 +1,5 @@
 declare module '@env' {
-  export const SENTRY_DSN: string;
+  export const SOME_ENV_VAR: string;
 }
 
 export {};

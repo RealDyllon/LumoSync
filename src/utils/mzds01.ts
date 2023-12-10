@@ -94,7 +94,7 @@ const colorHexToBase64 = (hex: string) => {
   const colorEncodedValue = Buffer.from(colorHexValue, 'hex').toString(
     'base64',
   );
-  console.debug('[colorHexToBase64]', colorEncodedValue);
+  // console.debug('[colorHexToBase64]', colorEncodedValue);
   return codes.color.prefix + colorEncodedValue;
 };
 
