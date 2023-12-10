@@ -1,5 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import {Divider, SegmentedButtons, Switch, Text} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {LightMode, lightMode} from '../utils/mzds01';
 import BrightnessSlider from './BrightnessSlider';
 import StrobeSlider from './StrobeSlider';
@@ -53,6 +54,9 @@ export const LightControls = ({
           Light Mode
         </Text>
         <View style={styles.spacer} />
+        <Text style={{
+          fontWeight: "bold",
+        }}>Power</Text>
         <Switch
           value={properties.power}
           onValueChange={handlePowerStateChange}
@@ -71,17 +75,17 @@ export const LightControls = ({
         buttons={[
           {
             value: lightMode.WARM_WHITE,
-            label: 'Warm White',
+            icon: 'white-balance-sunny',
             disabled: disabled || !properties.power,
           },
           {
             value: lightMode.RAINBOW,
-            label: 'Rainbow',
+            label: "🌈",
             disabled: disabled || !properties.power,
           },
           {
             value: lightMode.STATIC_COLOR,
-            label: 'Custom Color',
+            label: '🎨',
             disabled: disabled || !properties.power,
           },
         ]}
