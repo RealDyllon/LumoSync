@@ -58,7 +58,7 @@ const DeviceGrid = (props: Props) => {
           return 'gray';
         }
       }
-      if (peripheralProperties.lightMode === 'STATIC_COLOR') {
+      if (peripheralProperties.lightMode === 'STATIC_COLOR' || peripheralProperties.color) {
         if (peripheralProperties.power) {
           return peripheralProperties.color ?? 'black';
         } else {
