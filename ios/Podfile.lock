@@ -74,7 +74,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.72.3)
   - hermes-engine/Pre-built (0.72.3)
   - libevent (2.1.12)
-  - MultiplatformBleAdapter (0.1.9)
+  - MultiplatformBleAdapter (0.2.0)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
     - boost
@@ -376,8 +376,9 @@ PODS:
   - React-jsinspector (0.72.3)
   - React-logger (0.72.3):
     - glog
-  - react-native-ble-plx (2.1.1):
-    - MultiplatformBleAdapter (= 0.1.9)
+  - react-native-ble-plx (3.1.2):
+    - MultiplatformBleAdapter (= 0.2.0)
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-flipper (0.182.0):
     - React-Core
@@ -529,12 +530,6 @@ PODS:
   - RNScreens (3.22.1):
     - React-Core
     - React-RCTImage
-  - RNSentry (5.7.1):
-    - React-Core
-    - Sentry/HybridSDK (= 8.8.0)
-  - Sentry/HybridSDK (8.8.0):
-    - SentryPrivate (= 8.8.0)
-  - SentryPrivate (8.8.0)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -586,7 +581,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - "react-native-ble-plx (from `../node_modules/@my01/react-native-ble-plx`)"
+  - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -610,7 +605,6 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -628,8 +622,6 @@ SPEC REPOS:
     - libevent
     - MultiplatformBleAdapter
     - OpenSSL-Universal
-    - Sentry
-    - SentryPrivate
     - SocketRocket
     - YogaKit
 
@@ -678,7 +670,7 @@ EXTERNAL SOURCES:
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-ble-plx:
-    :path: "../node_modules/@my01/react-native-ble-plx"
+    :path: "../node_modules/react-native-ble-plx"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
   react-native-quick-base64:
@@ -725,8 +717,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSentry:
-    :path: "../node_modules/@sentry/react-native"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -748,7 +738,7 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 10fbd3f62405c41ea07e71973ea61e1878d07322
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
+  MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: a2faf4bad4e438ca37b2040cb8f7799baa065c18
@@ -765,7 +755,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 59d1eb03af7d30b7d66589c410f13151271e8006
   React-jsinspector: b511447170f561157547bc0bef3f169663860be7
   React-logger: c5b527272d5f22eaa09bb3c3a690fee8f237ae95
-  react-native-ble-plx: 4b294d99f5670d9cd58e7e9ae7ecb995acb5edc7
+  react-native-ble-plx: 669899d2fd4d360d541b05ce19c6ee77d95853bf
   react-native-flipper: 6e4e344a0104a34a4e189a9ef2b3b5634b516dc8
   react-native-quick-base64: 62290829c619fbabca4c41cfec75ae759d08fc1c
   react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
@@ -789,9 +779,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
   RNScreens: 50ffe2fa2342eabb2d0afbe19f7c1af286bc7fb3
-  RNSentry: 4e4fc87b53002c015f644cb7207d4b598bc3703f
-  Sentry: 927dfb29d18a14d924229a59cc2ad149f43349f2
-  SentryPrivate: 4350d865f898224ab9fa02b37d6ee7fbb623f47e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 8796b55dba14d7004f980b54bcc9833ee45b28ce
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
