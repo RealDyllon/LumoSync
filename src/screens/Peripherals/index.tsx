@@ -90,16 +90,6 @@ export const PeripheralsScreen = () => {
           renderItem={renderItem}
           keyExtractor={item => item.device.id}
         />
-
-        <Button
-          mode="contained"
-          onPress={() => {
-            throw new Error("My first Sentry error!")
-          }}
-          style={{margin: 10}}>
-          Create error (Test Logging)
-        </Button>
-
       </SafeAreaView>
     </>
   );

@@ -1,9 +1,6 @@
 import React from 'react';
 import type {ReactElement} from 'react';
-// @ts-ignore
-import {SENTRY_DSN} from '@env';
 
-import * as Sentry from '@sentry/react-native';
 import {RootNavigation} from './src/navigation';
 import BLE from './src/components/BLE';
 import {
@@ -14,23 +11,6 @@ import {
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import GroupProgramMode from './src/components/GroupProgramMode';
 import {NotifierWrapper} from 'react-native-notifier';
-
-if (!SENTRY_DSN) {
-  console.error('Missing SENTRY_DSN');
-}
-
-const routingInstrumentation = new Sentry.ReactNavigationInstrumentation();
-
-Sentry.init({
-  dsn: SENTRY_DSN,
-  environment: __DEV__ ? 'development' : 'production',
-  tracesSampleRate: 1.0,
-  integrations: [
-    new Sentry.ReactNativeTracing({
-      routingInstrumentation,
-    }),
-  ],
-});
 
 const theme: MD3Theme = {
   ...DefaultTheme,
@@ -52,4 +32,4 @@ function App(): ReactElement {
   );
 }
 
-export default Sentry.wrap(App);
+export default App
