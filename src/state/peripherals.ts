@@ -166,6 +166,28 @@ export const usePeripheralStore = create<PeripheralState>()(
     setGroupedPeripheralProperty: async (key, value) => {
       const ids = Array.from(get().groupedPeripherals);
       if (key === 'programMode') {
+        if (!(value as GroupedPeripheralProperties['programMode']).enabled) {
+          // reset all properties to grouped properties
+          await Promise.all(
+            ids.map(id =>
+              {
+                const groupedProperties = get().groupedPeripheralProperties;
+                const {color, ...propertiesWithoutColor} = groupedProperties;
+                const {lightMode, ...propertiesWithoutLightMode} = groupedProperties;
+                const propertiesToWrite = groupedProperties.lightMode === 'STATIC_COLOR' ? propertiesWithoutLightMode : propertiesWithoutColor;
+                for (const [key, value] of Object.entries(propertiesToWrite)) {
+                  if (key !== 'programMode') {
+                    setProperty(
+                      id,
+                      key as keyof PeripheralProperties,
+                      value as string | number | boolean,
+                    );
+                  }
+                }
+              }
+            ),
+          );
+        }
         return set({
           groupedPeripheralProperties: {
             ...get().groupedPeripheralProperties,
