@@ -1,5 +1,5 @@
 import {programModes, usePeripheralStore} from '../state';
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {ProgramKeyFramePeripheral, programs} from '../utils/programs';
 import {setProperty} from '../utils/mzds01';
 import {useInterval} from '../utils/useInterval';
@@ -48,6 +48,11 @@ const GroupProgramMode = () => {
         return programs.chasingLight(connectedGroupedPeripherals);
     }
   }, [connectedGroupedPeripherals, programMode.program]);
+
+  useEffect(() => {
+    console.log("program changed", program)
+    // setTimer(0);
+  }, [program]);
 
   const setProgramStatus = usePeripheralStore(state => state.setProgramStatus);
 

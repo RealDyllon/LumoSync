@@ -41,8 +41,8 @@ const DeviceGrid = (props: Props) => {
   );
 
   const renderGridItem = (item: GridItemData) => {
-    const keyframePeripheral =
-      programStatus.peripherals.get(item.device.id) ??
+    const peripheralProperties = (groupedPeripheralProperties.programMode.enabled) ?
+      (programStatus.peripherals.get(item.device.id) ?? groupedPeripheralProperties) :
       groupedPeripheralProperties;
 
     const isUnavailable = !peripherals.get(item.device.id)?.properties.paired;
@@ -51,22 +51,22 @@ const DeviceGrid = (props: Props) => {
       if (isUnavailable) {
         return 'black';
       }
-      if (keyframePeripheral.lightMode === 'WARM_WHITE') {
-        if (keyframePeripheral.power) {
+      if (peripheralProperties.lightMode === 'WARM_WHITE') {
+        if (peripheralProperties.power) {
           return 'orange';
         } else {
           return 'gray';
         }
       }
-      if (keyframePeripheral.lightMode === 'STATIC_COLOR') {
-        if (keyframePeripheral.power) {
-          return keyframePeripheral.color ?? 'black';
+      if (peripheralProperties.lightMode === 'STATIC_COLOR') {
+        if (peripheralProperties.power) {
+          return peripheralProperties.color ?? 'black';
         } else {
           return 'gray';
         }
       }
-      if (keyframePeripheral.lightMode === 'RAINBOW') {
-        if (keyframePeripheral.power) {
+      if (peripheralProperties.lightMode === 'RAINBOW') {
+        if (peripheralProperties.power) {
           return 'purple'; // todo: display icon with rainbow fill
         } else {
           return 'gray';
