@@ -2,7 +2,9 @@
 
 ## v1.2
 Fixes
-
+- Fix Crash when executing Fade Program
+- Add brightness display to group device grid
+  - Supports automatic contrasting color selection for brightness label (WCAG formula)
 
 ## v1.1
 Fixes
