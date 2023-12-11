@@ -4,7 +4,9 @@ This is a [**React Native**](https://reactnative.dev) project, bootstrapped usin
 
 ## Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+### Step 0: Prerequisites
+
+Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ### Step 1: Start the Metro Server
 
@@ -57,6 +59,19 @@ Lumosync
     |- types/ - TypeScript Types
     |- utils/ - Utility Functions
 ```
+
+# Building Releases
+
+## For Android
+
+```bash
+cd android
+./gradlew assembleRelease
+```
+
+## For iOS
+
+Use Xcode to build the release.
 
 # Troubleshooting
 
