@@ -121,12 +121,11 @@ const fade = (ids: string[]): Program => {
     brightness: 40,
   };
   const keyframes: ProgramKeyFrame[] = [40, 30, 20, 10, 20, 30].map(
-    (brightness, index) => {
+    (brightness, _index) => {
       const arr: ProgramKeyFramePeripheral[] = Array(ids.length).fill({
         ...lightOn,
         brightness,
       });
-      arr[index] = lightOn;
       return {
         peripherals: new Map(arr.map((p, i) => [ids[i], p])),
       };
