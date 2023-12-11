@@ -4,6 +4,8 @@ import {usePeripheralStore} from '../../state';
 import {Peripheral} from '../../utils/ble';
 import {useMemo} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import getContrastingColor from "react-native-paper/lib/typescript/src/utils/getContrastingColor";
+import {getContrast} from "../../utils/color";
 
 interface Props {
   groupedPeripheralIds: Set<string>;
@@ -79,11 +81,26 @@ const DeviceGrid = (props: Props) => {
 
     return (
       <View style={styles.item} key={item.device.id}>
-        <Icon
-          name={isUnavailable ? 'lightbulb-off' : 'lightbulb'}
-          size={32}
-          color={color}
-        />
+        <View style={{
+          position: "relative"
+        }}>
+          <Icon
+            name={isUnavailable ? 'lightbulb-off' : 'lightbulb'}
+            size={32}
+            color={color}
+          />
+          <Text style={{
+            fontSize: 10,
+            position: "absolute",
+            top: 6,
+            left: 0,
+            right: 0,
+            margin: "auto",
+            textAlign: "center",
+            fontWeight: "900",
+            color: getContrast(peripheralProperties.color ?? 'black')
+          }}>{peripheralProperties.brightness}</Text>
+        </View>
         <Text style={styles.itemText}>{item.name}</Text>
       </View>
     );

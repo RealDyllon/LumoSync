@@ -1,5 +1,11 @@
 # LumoSync Changelog
 
+## v1.2
+Fixes
+- Fix Crash when executing Fade Program
+- Add brightness display to group device grid
+  - Supports automatic contrasting color selection for brightness label (WCAG formula)
+
 ## v1.1
 Fixes
 - Separate Unsupported devices in home screen
@@ -20,5 +26,5 @@ Fixes
 - Return peripheral to previous properties when program mode is disabled
 - Fix Group Device Grid - added support for displaying colors when program mode is disabled
 
-## v1.0
+## v1.0 
 Initial release
