@@ -1,5 +1,7 @@
 # LumoSync
 
+A Cross Platform Mobile Application to control and synchronise lighting for photography using Bluetooth Low Energy (BLE) devices.
+
 This is a [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 ## Getting Started
